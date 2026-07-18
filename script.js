@@ -53,7 +53,7 @@ if (saveButton) {
 const updateButton = document.getElementById('update-images');
 const galleryGrid = document.getElementById('gallery-grid');
 
-function updateGalleryImages() {
+async function updateGalleryImages() {
   const imageInputs = [
     document.getElementById('image1'),
     document.getElementById('image2'),
@@ -61,18 +61,35 @@ function updateGalleryImages() {
     document.getElementById('image4'),
   ];
 
-  const urls = imageInputs.map((input) => input?.value.trim()).filter(Boolean);
   const figures = galleryGrid?.querySelectorAll('figure') || [];
+  const urls = [];
+
+  for (let index = 0; index < imageInputs.length; index += 1) {
+    const input = imageInputs[index];
+    const file = input?.files?.[0];
+
+    if (file) {
+      const dataUrl = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(file);
+      });
+      urls.push(dataUrl);
+    } else {
+      urls.push('');
+    }
+  }
 
   figures.forEach((figure, index) => {
     const img = figure.querySelector('img');
-    if (img && urls[index]) {
-      img.src = urls[index];
+    if (img) {
+      const selectedUrl = urls[index] || figure.dataset.defaultUrl || img.src;
+      img.src = selectedUrl;
       img.alt = `Imagem ${index + 1}`;
     }
   });
 
-  localStorage.setItem('galleryImages', JSON.stringify(urls));
+  localStorage.setItem('galleryImages', JSON.stringify(urls.filter(Boolean)));
 }
 
 if (updateButton) {
@@ -81,11 +98,13 @@ if (updateButton) {
 
 const savedGalleryImages = JSON.parse(localStorage.getItem('galleryImages') || 'null');
 if (savedGalleryImages && Array.isArray(savedGalleryImages)) {
-  const inputs = [document.getElementById('image1'), document.getElementById('image2'), document.getElementById('image3'), document.getElementById('image4')];
-  savedGalleryImages.forEach((url, index) => {
-    if (inputs[index]) {
-      inputs[index].value = url;
+  const figures = galleryGrid?.querySelectorAll('figure') || [];
+  figures.forEach((figure, index) => {
+    const img = figure.querySelector('img');
+    const url = savedGalleryImages[index];
+    if (img && url) {
+      img.src = url;
+      img.alt = `Imagem ${index + 1}`;
     }
   });
-  updateGalleryImages();
 }
