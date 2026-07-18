@@ -1,6 +1,6 @@
 :root {
   color-scheme: light;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Playfair Display', Georgia, serif;
   --pink: #ff4d6d;
   --pink-dark: #c9184a;
   --white: #ffffff;
@@ -71,15 +71,18 @@ body {
 }
 
 .hero h1 {
-  font-size: clamp(2rem, 4vw, 2.7rem);
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(2.4rem, 4.5vw, 3.2rem);
   margin-bottom: 0.5rem;
   color: var(--pink-dark);
+  letter-spacing: 0.03em;
 }
 
 .hero p {
   margin-top: 0;
   margin-bottom: 1.5rem;
   color: #5f4a53;
+  font-size: 1.02rem;
 }
 
 .button-row {
@@ -133,6 +136,22 @@ main {
 
 .panel.visible {
   display: block;
+}
+
+.panel h2 {
+  font-family: 'Great Vibes', cursive;
+  font-size: 1.75rem;
+  margin: 0 0 0.75rem;
+  color: var(--pink-dark);
+  letter-spacing: 0.02em;
+}
+
+.panel p,
+figcaption,
+textarea,
+.image-config label,
+.save-status {
+  font-family: 'Playfair Display', Georgia, serif;
 }
 
 .timer {
