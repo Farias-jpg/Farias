@@ -52,6 +52,7 @@ if (saveButton) {
 
 const updateButton = document.getElementById('update-images');
 const galleryGrid = document.getElementById('gallery-grid');
+const galleryStorageKey = 'galleryImages';
 
 async function updateGalleryImages() {
   const imageInputs = [
@@ -62,11 +63,13 @@ async function updateGalleryImages() {
   ];
 
   const figures = galleryGrid?.querySelectorAll('figure') || [];
-  const urls = [];
+  const savedImages = [];
 
   for (let index = 0; index < imageInputs.length; index += 1) {
     const input = imageInputs[index];
     const file = input?.files?.[0];
+    const figure = figures[index];
+    const img = figure?.querySelector('img');
 
     if (file) {
       const dataUrl = await new Promise((resolve) => {
@@ -74,29 +77,34 @@ async function updateGalleryImages() {
         reader.onload = () => resolve(reader.result);
         reader.readAsDataURL(file);
       });
-      urls.push(dataUrl);
+      savedImages.push(dataUrl);
+      if (img) {
+        img.src = dataUrl;
+        img.alt = `Imagem ${index + 1}`;
+      }
+    } else if (img) {
+      savedImages.push(img.src);
     } else {
-      urls.push('');
+      savedImages.push('');
     }
   }
 
-  figures.forEach((figure, index) => {
-    const img = figure.querySelector('img');
-    if (img) {
-      const selectedUrl = urls[index] || figure.dataset.defaultUrl || img.src;
-      img.src = selectedUrl;
-      img.alt = `Imagem ${index + 1}`;
-    }
-  });
-
-  localStorage.setItem('galleryImages', JSON.stringify(urls.filter(Boolean)));
+  localStorage.setItem(galleryStorageKey, JSON.stringify(savedImages));
 }
 
 if (updateButton) {
   updateButton.addEventListener('click', updateGalleryImages);
 }
 
-const savedGalleryImages = JSON.parse(localStorage.getItem('galleryImages') || 'null');
+const savedGalleryImages = (() => {
+  try {
+    return JSON.parse(localStorage.getItem(galleryStorageKey) || 'null');
+  } catch (error) {
+    console.error('Não foi possível restaurar as imagens da galeria:', error);
+    return null;
+  }
+})();
+
 if (savedGalleryImages && Array.isArray(savedGalleryImages)) {
   const figures = galleryGrid?.querySelectorAll('figure') || [];
   figures.forEach((figure, index) => {
