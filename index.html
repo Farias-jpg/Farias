@@ -45,7 +45,14 @@
             <label>Imagem 4
               <input type="file" id="image4" accept="image/*" />
             </label>
-            <button id="update-images">Atualizar imagens</button>
+            <label>Token do GitHub
+              <input type="password" id="github-token" placeholder="Token com permissão de conteúdo" />
+            </label>
+            <div class="upload-actions">
+              <button id="update-images">Atualizar na página</button>
+              <button id="upload-images">Enviar para GitHub</button>
+            </div>
+            <div id="upload-status" class="save-status" aria-live="polite"></div>
           </div>
           <div class="gallery-grid" id="gallery-grid">
             <figure>

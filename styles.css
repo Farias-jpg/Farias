@@ -203,6 +203,12 @@ textarea {
   font-size: 0.95rem;
 }
 
+.upload-actions {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
 .save-status {
   color: var(--pink-dark);
   font-weight: 600;

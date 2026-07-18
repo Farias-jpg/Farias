@@ -51,8 +51,19 @@ if (saveButton) {
 }
 
 const updateButton = document.getElementById('update-images');
+const uploadButton = document.getElementById('upload-images');
+const uploadStatus = document.getElementById('upload-status');
 const galleryGrid = document.getElementById('gallery-grid');
 const galleryStorageKey = 'galleryImages';
+
+async function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
 
 async function updateGalleryImages() {
   const imageInputs = [
@@ -72,11 +83,7 @@ async function updateGalleryImages() {
     const img = figure?.querySelector('img');
 
     if (file) {
-      const dataUrl = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.readAsDataURL(file);
-      });
+      const dataUrl = await readFileAsDataUrl(file);
       savedImages.push(dataUrl);
       if (img) {
         img.src = dataUrl;
@@ -92,8 +99,73 @@ async function updateGalleryImages() {
   localStorage.setItem(galleryStorageKey, JSON.stringify(savedImages));
 }
 
+async function uploadImagesToGithub() {
+  const token = document.getElementById('github-token')?.value?.trim();
+  const imageInputs = [
+    document.getElementById('image1'),
+    document.getElementById('image2'),
+    document.getElementById('image3'),
+    document.getElementById('image4'),
+  ];
+
+  if (!token) {
+    uploadStatus.textContent = 'Informe o token do GitHub.';
+    return;
+  }
+
+  uploadStatus.textContent = 'Enviando imagens...';
+
+  const uploads = [];
+  for (let index = 0; index < imageInputs.length; index += 1) {
+    const file = imageInputs[index]?.files?.[0];
+    if (!file) continue;
+    const dataUrl = await readFileAsDataUrl(file);
+    const base64 = dataUrl.split(',')[1];
+    const fileName = `images/${Date.now()}-${index + 1}-${file.name}`;
+    uploads.push({ fileName, content: base64, mime: file.type });
+  }
+
+  if (uploads.length === 0) {
+    uploadStatus.textContent = 'Selecione pelo menos uma imagem.';
+    return;
+  }
+
+  try {
+    const repoOwner = 'Farias-jpg';
+    const repoName = 'Farias';
+    const branch = 'gh-pages';
+
+    for (const upload of uploads) {
+      const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${upload.fileName}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: `Upload image ${upload.fileName}`,
+          content: upload.content,
+          branch,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Falha ao enviar ${upload.fileName}`);
+      }
+    }
+
+    uploadStatus.textContent = 'Imagens enviadas com sucesso!';
+  } catch (error) {
+    uploadStatus.textContent = `Erro ao enviar: ${error.message}`;
+  }
+}
+
 if (updateButton) {
   updateButton.addEventListener('click', updateGalleryImages);
+}
+
+if (uploadButton) {
+  uploadButton.addEventListener('click', uploadImagesToGithub);
 }
 
 const savedGalleryImages = (() => {
