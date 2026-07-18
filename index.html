@@ -32,7 +32,22 @@
 
         <section id="gallery" class="panel">
           <h2>Imagens selecionadas</h2>
-          <div class="gallery-grid">
+          <div class="image-config">
+            <label>Link 1
+              <input type="text" id="image1" value="https://picsum.photos/seed/love1/600/400" />
+            </label>
+            <label>Link 2
+              <input type="text" id="image2" value="https://picsum.photos/seed/love2/600/400" />
+            </label>
+            <label>Link 3
+              <input type="text" id="image3" value="https://picsum.photos/seed/love3/600/400" />
+            </label>
+            <label>Link 4
+              <input type="text" id="image4" value="https://picsum.photos/seed/love4/600/400" />
+            </label>
+            <button id="update-images">Atualizar imagens</button>
+          </div>
+          <div class="gallery-grid" id="gallery-grid">
             <figure>
               <img src="https://picsum.photos/seed/love1/600/400" alt="Cena romântica 1" />
               <figcaption>Momento especial</figcaption>

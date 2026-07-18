@@ -49,3 +49,43 @@ if (saveButton) {
     }
   });
 }
+
+const updateButton = document.getElementById('update-images');
+const galleryGrid = document.getElementById('gallery-grid');
+
+function updateGalleryImages() {
+  const imageInputs = [
+    document.getElementById('image1'),
+    document.getElementById('image2'),
+    document.getElementById('image3'),
+    document.getElementById('image4'),
+  ];
+
+  const urls = imageInputs.map((input) => input?.value.trim()).filter(Boolean);
+  const figures = galleryGrid?.querySelectorAll('figure') || [];
+
+  figures.forEach((figure, index) => {
+    const img = figure.querySelector('img');
+    if (img && urls[index]) {
+      img.src = urls[index];
+      img.alt = `Imagem ${index + 1}`;
+    }
+  });
+
+  localStorage.setItem('galleryImages', JSON.stringify(urls));
+}
+
+if (updateButton) {
+  updateButton.addEventListener('click', updateGalleryImages);
+}
+
+const savedGalleryImages = JSON.parse(localStorage.getItem('galleryImages') || 'null');
+if (savedGalleryImages && Array.isArray(savedGalleryImages)) {
+  const inputs = [document.getElementById('image1'), document.getElementById('image2'), document.getElementById('image3'), document.getElementById('image4')];
+  savedGalleryImages.forEach((url, index) => {
+    if (inputs[index]) {
+      inputs[index].value = url;
+    }
+  });
+  updateGalleryImages();
+}
