@@ -86,7 +86,14 @@ body {
   display: flex;
   gap: 0.8rem;
   justify-content: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.button-row .action-btn {
+  flex: 1 1 0;
+  min-width: 140px;
+  white-space: nowrap;
 }
 
 .action-btn,
