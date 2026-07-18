@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dia dos Namorados</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <div class="heart-scene" aria-hidden="true">
+          <span class="heart heart-1">❤</span>
+          <span class="heart heart-2">❤</span>
+          <span class="heart heart-3">❤</span>
+        </div>
+        <h1>EU TE AMO PARA SEMPRE</h1>
+        <p>Escolha uma opção para continuar a surpresa.</p>
+        <div class="button-row">
+          <button class="action-btn" data-target="counter">Ver contador</button>
+          <button class="action-btn" data-target="gallery">Ver imagens</button>
+          <button class="action-btn" data-target="message">Escrever</button>
+        </div>
+      </header>
+
+      <main>
+        <section id="counter" class="panel">
+          <h2>Contador de tempo</h2>
+          <p>Nosso amor deu inicio aqui!</p>
+          <div id="timer" class="timer" aria-live="polite">Carregando...</div>
+        </section>
+
+        <section id="gallery" class="panel">
+          <h2>Imagens selecionadas</h2>
+          <div class="gallery-grid">
+            <figure>
+              <img src="https://picsum.photos/seed/love1/600/400" alt="Cena romântica 1" />
+              <figcaption>Momento especial</figcaption>
+            </figure>
+            <figure>
+              <img src="https://picsum.photos/seed/love2/600/400" alt="Cena romântica 2" />
+              <figcaption>Doce lembrança</figcaption>
+            </figure>
+            <figure>
+              <img src="https://picsum.photos/seed/love3/600/400" alt="Cena romântica 3" />
+              <figcaption>Nosso carinho</figcaption>
+            </figure>
+            <figure>
+              <img src="https://picsum.photos/seed/love4/600/400" alt="Cena romântica 4" />
+              <figcaption>Mais um motivo para sorrir</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section id="message" class="panel">
+          <h2>Escreva algo bonito</h2>
+          <textarea id="message-input" placeholder="Escreva aqui sua mensagem...">Eu te amo muito mais do que todas as estrelas no céu, muito mais do que o universo inteiro, voçê é a pessoa que eu mais amo no mundo inteirinho, que nosso amor seja infinito e que cada dia nós possamos aproveitar mais e mais a vida um ao lado do outro. EU TE AMO MINHA PRINCESA!!!</textarea>
+          <div class="message-actions">
+            <button id="save-message">Salvar mensagem</button>
+            <span id="save-status" class="save-status" aria-live="polite"></span>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
